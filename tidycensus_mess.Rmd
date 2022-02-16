@@ -1,0 +1,61 @@
+---
+title: "household_travel_survey"
+author: "Grace Douglas"
+date: "2/15/2022"
+output: html_document
+---
+
+libraries
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(car)
+library(nnet)
+library(glmnet)
+library(RColorBrewer)
+library(tidycensus)
+library(censusapi)
+```
+
+
+set environment. this is my api key - use your own! find it at https://api.census.gov/data/key_signup.html
+```{r, eval = FALSE}
+# Add key to .Renviron
+Sys.setenv(CENSUS_KEY='7f46edb0c6443009b22033b8f11adc2272adbd9d')
+# Reload .Renviron
+readRenviron("~/.Renviron")
+# Check to see that the expected key is output in your R console
+Sys.getenv("CENSUS_KEY")
+
+#think this does the same thing
+census_api_key('7f46edb0c6443009b22033b8f11adc2272adbd9d', install = TRUE, overwrite = TRUE)
+readRenviron("~/.Renviron")
+```
+
+view all census APIs available
+```{r}
+apis = listCensusApis()
+View(apis) #which do we want? there seems to be a lot of ACS options
+
+#because ACS is so popular(?), there are built-in functions within the census data for ACS
+#example query from built-in get_acs() function. I dont know how this fuly works yet.
+data = get_acs(geography = "tract", state = "WA", variables = "B19013_001", year = 2019)
+
+head(data)
+
+#online example - should list possible variable in an api. you supply the 'name' argument, which can be found in the View(apis) table.
+sahie_vars <- listCensusMetadata(
+    name = "timeseries/healthins/sahie", 
+    type = "variables")
+head(sahie_vars)
+
+
+#doesnt work
+# acs_vars <- listCensusMetadata(
+#     name = "acs/acs1/profile", 
+#     type = "variables")
+# head(acs_vars)
+
+
+```
